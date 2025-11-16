@@ -1,0 +1,68 @@
+# ---------------------------
+# PYTHON
+# ---------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# PDF/Image temporary storage
+uploads/
+*.pdf
+*.jpg
+*.jpeg
+*.png
+
+# Byte-compiled / optimized / DLL files
+*.so
+*.dll
+*.dylib
+
+# ---------------------------
+# FASTAPI / GENERAL
+# ---------------------------
+*.sqlite3
+*.db
+*.sqlite
+*.tmp
+
+# Ignore local test files
+test/
+tests/
+
+# Ignore uvicorn reload artifacts
+*.pid
+
+# ---------------------------
+# ENVIRONMENT FILES
+# ---------------------------
+.env
+.env.*
+!.env.example   # allow example env file
+
+# ---------------------------
+# NODE / REACT
+# ---------------------------
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Build files
+dist/
+build/
+
+# ---------------------------
+# OS / EDITOR FILES
+# ---------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
