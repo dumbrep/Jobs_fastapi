@@ -11,4 +11,5 @@ langchain-google-genai
 upstash-redis
 requests
 python-multipart   
+uvicorn[standard]
 
