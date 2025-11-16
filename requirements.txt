@@ -10,4 +10,5 @@ langchain-community
 langchain-google-genai
 upstash-redis
 requests
-python-multipart   <-- ADD THIS
+python-multipart   
+
