@@ -1,9 +1,20 @@
 # main.py
 from fastapi import FastAPI, File, UploadFile, Form, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,   
+    allow_methods=["*"],
+    allow_headers=["*"], 
+)
 import openai
 import os
 from dotenv import load_dotenv
-from fastapi.middleware.cors import CORSMiddleware
+
 import io
 import asyncio
 import base64
@@ -43,15 +54,7 @@ genai.configure(api_key=genai_api_key)
 # Upstash Redis client (async-capable)
 redis = Redis(url=UPSTASH_URL, token=UPSTASH_TOKEN)
 
-app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,   
-    allow_methods=["*"],
-    allow_headers=["*"], 
-)
  
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
