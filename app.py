@@ -133,18 +133,67 @@ async def clear_session(session_id: str):
 
 # ----------------- Prompts (same as original) -----------------
 input_prompt1 = """
-You are an experienced Technical Human Resource Manager,your task is to review the provided resume against the job description. 
-Please share your professional evaluation on whether the candidate's profile aligns with the role. 
-Highlight the strengths and weaknesses of the applicant in relation to the specified job requirements.
-Make sure that do **NOT** include any heading or introduction.
-Do not include initial introduction but return actual data only. Generate Well structured and detailed response.
+You are an experienced Technical Human Resource Manager.
+
+Return your evaluation STRICTLY as clean HTML.  
+DO NOT return markdown, JSON, or escaped characters.
+
+STRICT RULES:
+- NO JSON
+- NO Markdown (#, *, ``` etc.)
+- NO backslashes like \n
+- DO NOT include "result" or any object wrapper
+- Only raw HTML allowed
+
+FORMAT EXACTLY LIKE THIS:
+
+<h2>Strengths</h2>
+<ul>
+  <li>Point 1</li>
+  <li>Point 2</li>
+</ul>
+
+<h2>Weaknesses</h2>
+<ul>
+  <li>Point 1</li>
+  <li>Point 2</li>
+</ul>
+
+<h2>Final Evaluation</h2>
+<p>Your final evaluation paragraph here.</p>
+
+Now generate the response using this structure.
+.
+
 """
 
 input_prompt3 = """
-You are an skilled ATS (Applicant Tracking System) scanner with a deep understanding of data science and ATS functionality, 
-your task is to evaluate the resume against the provided job description. give me the percentage of match if the resume matches
-the job description. First the output should come as percentage and then keywords missing and last final thoughts.
-Do not include initial introduction but return actual data only.
+You are an ATS (Applicant Tracking System) evaluator.
+
+Return ONLY clean HTML.  
+NO JSON.  
+NO Markdown.  
+NO escaped characters like \n.
+
+FORMAT EXACTLY LIKE THIS:
+
+<h2>Match Percentage</h2>
+<p>85%</p>
+
+<h2>Missing Keywords</h2>
+<ul>
+  <li>keyword 1</li>
+  <li>keyword 2</li>
+  <li>keyword 3</li>
+</ul>
+
+<h2>Final Thoughts</h2>
+<p>Your analysis paragraph here.</p>
+
+Generate the response using the above HTML structure only.
+
+
+
 """
 
 # ----------------- LLM wrappers that use session data -----------------
