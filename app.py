@@ -1,4 +1,4 @@
-# main.py
+
 from fastapi import FastAPI, File, UploadFile, Form, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -133,52 +133,36 @@ async def clear_session(session_id: str):
 
 # ----------------- Prompts (same as original) -----------------
 input_prompt1 = """
-You are an experienced Technical Human Resource Manager.
-
-Return your evaluation STRICTLY as clean HTML.  
-DO NOT return markdown, JSON, or escaped characters.
-
-STRICT RULES:
-- NO JSON
-- NO Markdown (#, *, ``` etc.)
-- NO backslashes like \n
-- DO NOT include "result" or any object wrapper
-- Only raw HTML allowed
-
-FORMAT EXACTLY LIKE THIS:
+You are an experienced Technical Human Resource Manager. Your task is to review the provided resume against the job description.
+Return ONLY clean HTML.
+NO Markdown.
+NO JSON.
+NO escaped characters like \\n.
 
 <h2>Strengths</h2>
 <ul>
-  <li>Point 1</li>
-  <li>Point 2</li>
+  <li>First strength here</li>
+  <li>Second strength here</li>
 </ul>
 
 <h2>Weaknesses</h2>
 <ul>
-  <li>Point 1</li>
-  <li>Point 2</li>
+  <li>First weakness here</li>
+  <li>Second weakness here</li>
 </ul>
 
 <h2>Final Evaluation</h2>
 <p>Your final evaluation paragraph here.</p>
 
 Now generate the response using this structure.
-.
-
 """
 
 input_prompt3 = """
 You are an ATS (Applicant Tracking System) evaluator.
-
-Return ONLY clean HTML.  
-NO JSON.  
-NO Markdown.  
-NO escaped characters like \n.
-
-FORMAT EXACTLY LIKE THIS:
-
-<h2>Match Percentage</h2>
-<p>85%</p>
+Return ONLY clean HTML.
+NO JSON.
+NO Markdown.
+NO escaped characters like \\n.
 
 <h2>Missing Keywords</h2>
 <ul>
@@ -191,9 +175,6 @@ FORMAT EXACTLY LIKE THIS:
 <p>Your analysis paragraph here.</p>
 
 Generate the response using the above HTML structure only.
-
-
-
 """
 
 # ----------------- LLM wrappers that use session data -----------------
