@@ -212,18 +212,22 @@ async def analyze_response(session_id: str, question: str, answer: str) -> str:
     resume = await get_session_value(session_id, "resume") or ""
     job_desc = await get_session_value(session_id, "jobDescription") or ""
     prompt = f"""
-        You have given the question and its corresponding response by candidate
-        Question : {question}
-        Response : {answer}
-        Generate best feedback to be given to the candidate
-        - Generate response in a tone which feets like you are actually talking with candidate.
-        - Only generate response, do not ask question
-        - If candidate asks for ideal response, provide it only when explicitly requested.
-        - Generate feedback in paragraph format, short and sweet.
-        - Do not add introduction.
-        **Candidate resume** : {resume}
-        **Job descriptions** : {job_desc}
+        You are generating feedback for a candidate based on their answer.
+
+        Question: {question}
+        Response: {answer}
+
+        Provide concise, direct feedback (below 3-5 sentences max) in a conversational tone.
+        - Keep it short, clear, and actionable.
+        - Do NOT ask questions.
+        - Only give an ideal answer if the candidate explicitly requested it.
+        - Focus only on what helps the candidate improve.
+        - Write only the feedback paragraph.
+
+        Candidate Resume: {resume}
+        Job Description: {job_desc}
         """
+
     resp = model_local.generate_content(prompt)
 
     return resp.text.strip()
@@ -305,11 +309,22 @@ async def upload_resume_file(ATSdescription: str = Form(...), prompt_number: int
         await set_session_value(session_id, "ats_prompt", input_prompt3)
     return {"message": "Uploaded and stored for ATS", "session_id": session_id}
 
+
+def clean_response(text: str) -> str:
+    if text is None:
+        return ""
+    # Remove starting ```... and ending ```
+    text = text.strip()
+    if text.startswith("```"):
+        # remove first line (```html or ```)
+        text = "\n".join(text.split("\n")[1:])
+    if text.endswith("```"):
+        text = "\n".join(text.split("\n")[:-1])
+    return text.strip()
+
+
 @app.post("/ats_response")
 async def sendAtsData(session_id: str = Form(...)):
-    """
-    Use stored page_parts + ats_prompt to call Gemini and return result.
-    """
     page_parts = await get_session_value(session_id, "page_parts")
     ats_prompt = await get_session_value(session_id, "ats_prompt")
     ATSJobdescription = await get_session_value(session_id, "ATSJobdescription") or ""
@@ -320,7 +335,10 @@ async def sendAtsData(session_id: str = Form(...)):
     try:
         model_local = genai.GenerativeModel('gemini-2.0-flash')
         response = model_local.generate_content([ats_prompt] + page_parts + [ATSJobdescription])
-        return {"result": response.text}
+        
+        cleaned_text = clean_response(response.text)
+
+        return {"result": cleaned_text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
